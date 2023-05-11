@@ -217,12 +217,19 @@ class DocSearch {
             query,
             params: this.algoliaOptions,
           },
+          {
+            indexName: 'tutorials',
+            query,
+            params: {
+              hitsPerPage: 20
+            },
+          },
         ])
         .then(data => {
           if (this.queryDataCallback && typeof this.queryDataCallback == "function") {
             this.queryDataCallback(data)
           }
-          let hits = data.results[0].hits;
+          let hits = [...data.results[0].hits, ...data.results[1].hits];
           if (transformData) {
             hits = transformData(hits) || hits;
           }
